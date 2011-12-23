@@ -29,6 +29,12 @@ import org.apache.commons.io.FileCleaningTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link FileCleaningTracker}
+ * 
+ * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
+ *
+ */
 public final class FileGarbageCollector {
     private static final Logger LOGGER=LoggerFactory.getLogger(FileGarbageCollector.class);
     private static final int LOCK_WAIT_TIME=1000;

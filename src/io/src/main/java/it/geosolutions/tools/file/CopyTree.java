@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  * 
  */
-public class AsyncCopyTree extends DirectoryWalker<Future<File>> {
+public class CopyTree extends DirectoryWalker<Future<File>> {
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(AsyncCopyTree.class);
+			.getLogger(CopyTree.class);
 
 	private final File sourceDir;
 	private final File destDir;
@@ -53,7 +53,7 @@ public class AsyncCopyTree extends DirectoryWalker<Future<File>> {
 
 	private final CompletionService<File> cs;
 
-	public AsyncCopyTree(FileFilter filter, final CompletionService<File> cs,
+	public CopyTree(FileFilter filter, final CompletionService<File> cs,
 			File sourceDir, File destDir) {
 		super(filter, -1);
 		if (sourceDir == null || destDir == null || cs == null) {
@@ -76,7 +76,7 @@ public class AsyncCopyTree extends DirectoryWalker<Future<File>> {
 	 *            controls how deep the hierarchy is navigated to (less than 0
 	 *            means unlimited)
 	 */
-	public AsyncCopyTree(FileFilter filter, final CompletionService<File> cs,
+	public CopyTree(FileFilter filter, final CompletionService<File> cs,
 			int deep, File sourceDir, File destDir) {
 		super(filter, deep);
 		if (sourceDir == null || destDir == null || cs == null) {
@@ -172,7 +172,7 @@ public class AsyncCopyTree extends DirectoryWalker<Future<File>> {
 	protected void handleFile(File file, int depth,
 			Collection<Future<File>> results) throws IOException {
 		if (!cancelled){
-			results.add(asyncFileCopy(cs, file, sourceDir, destDir));
+			results.add(asyncCopyTree(cs, file, sourceDir, destDir));
 		}
 	}
 
@@ -192,7 +192,7 @@ public class AsyncCopyTree extends DirectoryWalker<Future<File>> {
 	 * @throws IllegalArgumentException
 	 *             - if executor is null or terminated.
 	 */
-	public static Future<File> asyncFileCopy(
+	public static Future<File> asyncCopyTree(
 			final CompletionService<File> cs, final File source,
 			final File sourceDir, final File destinationDir)
 			throws RejectedExecutionException, IllegalArgumentException {

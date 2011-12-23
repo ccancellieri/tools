@@ -3,7 +3,7 @@ package it.geosolutions.tools;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import it.geosolutions.tools.file.AsyncCopyTree;
+import it.geosolutions.tools.file.CopyTree;
 import it.geosolutions.tools.file.Collector;
 
 import java.io.File;

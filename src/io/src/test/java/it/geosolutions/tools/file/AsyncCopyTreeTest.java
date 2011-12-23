@@ -52,7 +52,7 @@ public class AsyncCopyTreeTest {
 	@Ignore
 	public void asyncCopyTreeTest() {
 		System.out.println("START: asyncCopyTreeTest");
-		AsyncCopyTree act = new AsyncCopyTree(FileFilterUtils.or(
+		CopyTree act = new CopyTree(FileFilterUtils.or(
 				FileFilterUtils.directoryFileFilter(),
 				FileFilterUtils.fileFileFilter()), cs, srcMount, destMount);
 		Collection<Future<File>> list = act.copy();
@@ -79,7 +79,7 @@ public class AsyncCopyTreeTest {
 	public void asyncCopyTreeStopTest() {
 		System.out.println("START: asyncCopyTreeStopTest");
 		
-		AsyncCopyTree act = new AsyncCopyTree(FileFilterUtils.or(
+		CopyTree act = new CopyTree(FileFilterUtils.or(
 				FileFilterUtils.directoryFileFilter(),
 				FileFilterUtils.fileFileFilter()), cs, srcMount, destMount);
 		Collection<Future<File>> list = act.copy();
@@ -111,7 +111,7 @@ public class AsyncCopyTreeTest {
 	public void asyncStopCopyTest() {
 		System.out.println("START: asyncStopCopyTest");
 
-		final AsyncCopyTree act = new AsyncCopyTree(FileFilterUtils.or(
+		final CopyTree act = new CopyTree(FileFilterUtils.or(
 				FileFilterUtils.directoryFileFilter(),
 				FileFilterUtils.fileFileFilter()), cs, srcMount, destMount);
 		

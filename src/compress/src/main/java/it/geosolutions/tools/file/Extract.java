@@ -366,7 +366,6 @@ public final class Extract {
 //                        end_file.mkdir();
                     
                     //run the unzip method
-//                    Extractor.unzipFlat(in_file,end_file);
                     Extractor.unZip(in_name,end_name);
                     
                     if (remove_source)
