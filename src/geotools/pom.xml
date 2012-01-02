@@ -2,10 +2,9 @@
 <!-- =======================================================================    
         Maven Project Configuration File                                        
                                                                                 
-        GeoSolutions GeoBatch Project                                                    
-            http://geobatch.codehaus.org
+        GeoSolutions tools Project
                                                                                             
-        Version: $Id: pom.xml 329 2009-12-17 17:24:49Z dany111 $              
+        Version: $Id: pom.xml 329 2011-12-22 17:24:49Z ccancellieri $                    
      ======================================================================= -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -24,7 +23,7 @@
   <!--     Module Description                                      -->
   <!-- =========================================================== -->
   <groupId>it.geosolutions.tools</groupId>
-  <artifactId>geotools</artifactId>
+  <artifactId>tools-geotools</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   

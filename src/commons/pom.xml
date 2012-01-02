@@ -23,7 +23,7 @@
   <!--     Module Description                                      -->
   <!-- =========================================================== -->
   <groupId>it.geosolutions.tools</groupId>
-  <artifactId>commons</artifactId>
+  <artifactId>tools-commons</artifactId>
   <packaging>jar</packaging>
   
   <name>GeoSolutions commons tools</name>
