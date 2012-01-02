@@ -48,11 +48,11 @@
 		<!--  modules  -->
 		<dependency>
 			<groupId>it.geosolutions.tools</groupId>
-			<artifactId>commons</artifactId>
+			<artifactId>tools-commons</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>it.geosolutions.tools</groupId>
-			<artifactId>io</artifactId>
+			<artifactId>tools-io</artifactId>
 		</dependency>
 		
 		<!--  libraries -->

@@ -282,32 +282,32 @@
 	    <!--=================================================================-->
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>commons</artifactId>
+		<artifactId>tools-commons</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>io</artifactId>
+		<artifactId>tools-io</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>compress</artifactId>
+		<artifactId>tools-compress</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>netcdf</artifactId>
+		<artifactId>tools-netcdf</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>geotools</artifactId>
+		<artifactId>tools-geotools</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 		<groupId>it.geosolutions.tools</groupId>
-		<artifactId>freemarker</artifactId>
+		<artifactId>tools-freemarker</artifactId>
 		<version>${project.version}</version>
 	    </dependency>
 	    <!--=================================================================-->

@@ -18,7 +18,6 @@
  */
 package it.geosolutions.tools.file;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,35 +35,64 @@ public class Path {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Path.class);
 
 	/**
-	 * @note can return null
+	 * {@link #findLocation(String, String)}
+	 */
+	public static File findLocation(String location, File directory) {
+		if (directory == null) {
+			throw new IllegalArgumentException("Arguements can not be null");
+		}
+		final String path=findLocation(location, directory.getAbsolutePath());
+		if (path==null)
+			return null;
+		return new File(path);
+	}
+	
+	/**
+	 * {@link #findLocation(String, String)}
+	 */
+	public static File findLocation(File location, File directory) {
+		if (location == null || directory == null) {
+			throw new IllegalArgumentException("Arguements can not be null");
+		}
+		final String path=findLocation(location.getAbsolutePath(), directory.getAbsolutePath());
+		if (path==null)
+			return null;
+		return new File(path);
+	}
+	
+	/**
+	 * @note return null if is impossible to resolve the path 
 	 * @param location
 	 * @param directory
 	 * @return the absolute path
+	 * @throws IllegalArgumentException if arguments are null
 	 */
-	public static File findLocation(String location, File directory) {
-		if (location != null) {
-			// trim spaces
-			location = location.trim();
-		} else
-			return null;
+	public static String findLocation(String location, String directory) throws IllegalArgumentException{
+		if (location == null || directory == null) {
+			throw new IllegalArgumentException("Arguements can not be null");
+		}
+		
+		// trim spaces
+		location = location.trim();
 
 		// first to an existance check
 		File file = new File(location);
 
 		if (file.isAbsolute()) {
-			return file;
+			return file.getAbsolutePath();
 		} else {
 			// try a relative url
 			if (directory != null)
 				file = new File(directory, location);
 
 			if (file.exists()) {
-				return file;
+				return file.getAbsolutePath();
 			}
 		}
 
 		return null;
 	}
+
 
 	/*
 	 * (non-Javadoc)
