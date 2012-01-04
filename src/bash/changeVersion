@@ -54,7 +54,6 @@ XML_COMMAND_ARGS="ed -N x=http://maven.apache.org/POM/4.0.0 \
 
  if [ $1 = "-n" ]; then
 	for pom in `find $BASE_DIR -name pom.xml`; do 
-#		echo $XML_COMMAND $XML_COMMAND_ARGS $pom;
 		echo $XML_COMMAND_ARGS $pom|xargs $XML_COMMAND;
 		if [ $? -ne 0 ]; then
 			exit 1;
@@ -62,18 +61,20 @@ XML_COMMAND_ARGS="ed -N x=http://maven.apache.org/POM/4.0.0 \
 	done
  elif [ $1 = "-b" ]; then
 	for pom in `find $BASE_DIR -name pom.xml`; do 
-	 	cp -fp $1 $1".old";
-		echo $XML_COMMAND_ARGS $pom" > "$pom|xargs $XML_COMMAND;
+	 	cp -fp $pom $pom".old";
+		echo $XML_COMMAND_ARGS $pom".old"|xargs $XML_COMMAND > $pom;
 		if [ $? -ne 0 ]; then
 			exit 1;
 		fi
 	done
  elif [ $1 = "-c" ]; then
 	for pom in `find $BASE_DIR -name pom.xml`; do 
-		echo $XML_COMMAND_ARGS $pom" > "$pom|xargs $XML_COMMAND;
+	 	cp -fp $pom $pom".old";
+		echo $XML_COMMAND_ARGS $pom".old"|xargs $XML_COMMAND > $pom;
 		if [ $? -ne 0 ]; then
 			exit 1;
 		fi
+		rm $pom".old";
 	done
  else
 	echo "1st argument is wrong: $1"
