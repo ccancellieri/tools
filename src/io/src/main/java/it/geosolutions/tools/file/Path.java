@@ -82,8 +82,7 @@ public class Path {
 			return file.getAbsolutePath();
 		} else {
 			// try a relative url
-			if (directory != null)
-				file = new File(directory, location);
+			file = new File(directory, location);
 
 			if (file.exists()) {
 				return file.getAbsolutePath();

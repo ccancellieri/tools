@@ -99,7 +99,7 @@ public abstract class Producer {
             // writer for the processed text 
             final PipedWriter out = new PipedWriter(pr);
     //DEBUG                
-    //Writer out2 = new OutputStreamWriter(System.out);
+    //ExceptionWriter out2 = new OutputStreamWriter(System.out);
             
             productor=
                 executor.submit(new Callable<Object>() {
