@@ -45,7 +45,7 @@
 	<!-- Dependency Management -->
 	<!-- =========================================================== -->
 	<dependencies>
-		<!--  modules  -->
+		<!-- modules -->
 		<dependency>
 			<groupId>it.geosolutions.tools</groupId>
 			<artifactId>tools-commons</artifactId>
@@ -54,8 +54,8 @@
 			<groupId>it.geosolutions.tools</groupId>
 			<artifactId>tools-io</artifactId>
 		</dependency>
-		
-		<!--  libraries -->
+
+		<!-- libraries -->
 		<!-- BZ2, TAR compressor utility -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

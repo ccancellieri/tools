@@ -17,113 +17,94 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.tools.io.file;
+package it.geosolutions.tools.io;
 
 import it.geosolutions.tools.io.file.MultiPropertyFile;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import junit.framework.TestCase;
 
+import org.geotools.test.TestData;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * @author Simone Giannecchini, GeoSolutoins SAS
  * @author ETj (etj at geo-solutions.it)
  */
 public class MultiPropertyFileTest extends TestCase {
-    private final static Logger LOGGER = LoggerFactory.getLogger(MultiPropertyFileTest.class);
-    
-    
-    public MultiPropertyFileTest() {
-    }
 
-    private File loadFile(String name) {        
-        try {
-            URL url = this.getClass().getClassLoader().getResource(name);
-            if(url == null)
-                throw new IllegalArgumentException("Cant get file '"+name+"'");
-            File file = new File(url.toURI());
-            return file;
-        } catch (URISyntaxException e) {
-            LOGGER.error("Can't load file " + name + ": " + e.getMessage(), e);
-            return null;
-        }    
-    }
-    
-    private InputStream openStream(String name) {
-        
-        return getClass().getClassLoader().getResourceAsStream(name);
-    }
-    
-//    @Test
-    public void testIS() {
-        InputStream is = openStream("test-data/test.properties");
+    private final static Logger LOGGER = LoggerFactory.getLogger(MultiPropertyFileTest.class);
+
+    @Test
+    public void testIS() throws Exception {
+        InputStream is = TestData.openStream(this, "test.properties");
         assertNotNull(is);
-        
+
         MultiPropertyFile mpf = new MultiPropertyFile(is);
         boolean ok = mpf.read();
         assertTrue(ok);
-        
-        doTestMPF(mpf);        
+
+        doTestMPF(mpf);
     }
-    
-    public void testFile() {
-        File file = loadFile("test-data/test.properties");
+
+    @Test
+    public void testFile() throws Exception {
+        File file = TestData.file(this, "test.properties");
         assertNotNull(file);
-        
+
         MultiPropertyFile mpf = new MultiPropertyFile(file);
         boolean ok = mpf.read();
         assertTrue(ok);
-        
-        doTestMPF(mpf);        
+
+        doTestMPF(mpf);
     }
-    
-    protected void doTestMPF(MultiPropertyFile mpf) {
+
+    private void doTestMPF(MultiPropertyFile mpf) {
         assertTrue(mpf.exist("single"));
         assertTrue(mpf.exist("multi"));
         assertFalse(mpf.exist("notexists"));
-        
+
         assertTrue(mpf.isSingleValue("single"));
         assertTrue(mpf.isMultiValue("multi"));
 
         assertFalse(mpf.isSingleValue("notexists"));
         assertFalse(mpf.isMultiValue("notexists"));
-        
+
         assertEquals("val1", mpf.getString("single"));
-        assertEquals(2, mpf.getList("multi").size());        
+        assertEquals(2, mpf.getList("multi").size());
     }
 
-//    @Test
-    public void testErrors() {
-        InputStream is = openStream("test-data/test.properties");
+    @Test
+    public void testErrors() throws Exception {
+        InputStream is = TestData.openStream(this, "test.properties");
         assertNotNull(is);
-        
+
         MultiPropertyFile mpf = new MultiPropertyFile(is);
-        
+
         try {
             mpf.exist("pippo");
             fail("Unrecognized IllegalStateEx");
         } catch (IllegalStateException e) {
         }
-                
+
     }
-    
-    public void testErrorFile() {
-        File file = loadFile("test-data/test_err.properties");
+
+    @Test
+    public void testErrorFile() throws Exception {
+        File file = TestData.file(this, "test_err.properties");
         assertNotNull(file);
-        
+
         MultiPropertyFile mpf = new MultiPropertyFile(file);
         boolean ok = mpf.read();
         assertFalse(ok);
-        
+
         assertTrue(mpf.exist("single"));
         assertTrue(mpf.exist("multi"));
         assertTrue(mpf.isSingleValue("single"));
-        assertTrue(mpf.isMultiValue("multi"));                        
+        assertTrue(mpf.isMultiValue("multi"));
     }
 }
