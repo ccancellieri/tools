@@ -94,8 +94,12 @@ public class AsyncCopyTreeTest {
     public void asyncCopyTreeStopTest() throws Exception{
         LOGGER.info("START: asyncCopyTreeStopTest");
         File srcMount = TestData.file(this, ".");
-        CopyTree act = new CopyTree(FileFilterUtils.or(FileFilterUtils.directoryFileFilter(),
-                FileFilterUtils.fileFileFilter()), cs, srcMount, destMount);
+        CopyTree act = new CopyTree(
+                FileFilterUtils.or(FileFilterUtils.directoryFileFilter(),
+                FileFilterUtils.fileFileFilter()), 
+                cs, 
+                srcMount, 
+                destMount);
         Collection<Future<File>> list = act.copy();
         int workSize = list.size();
         try {

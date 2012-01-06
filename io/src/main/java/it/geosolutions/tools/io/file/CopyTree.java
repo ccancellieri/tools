@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class CopyTree extends DirectoryWalker<Future<File>> {
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(CopyTree.class);
+    
+	private final static Logger LOGGER = LoggerFactory.getLogger(CopyTree.class);
 
 	private final File sourceDir;
 	private final File destDir;
@@ -54,30 +54,20 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 
 	public CopyTree(FileFilter filter, final CompletionService<File> cs,
 			File sourceDir, File destDir) {
-		super(filter, -1);
-		if (sourceDir == null || destDir == null || cs == null) {
-			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error("Invalid null argument");
-			}
-			throw new IllegalArgumentException("Invalid null argument");
-		}
-
-		this.sourceDir = sourceDir;
-		this.destDir = destDir;
-		this.cs = cs;
+		this(filter, cs, -1, sourceDir, destDir);
 
 	}
 
 	/**
 	 * @param filter
 	 *            the filter to apply, null means visit all files
-	 * @param deep
+	 * @param depth
 	 *            controls how deep the hierarchy is navigated to (less than 0
 	 *            means unlimited)
 	 */
 	public CopyTree(FileFilter filter, final CompletionService<File> cs,
-			int deep, File sourceDir, File destDir) {
-		super(filter, deep);
+			int depth, File sourceDir, File destDir) {
+		super(filter, depth);
 		if (sourceDir == null || destDir == null || cs == null) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("Invalid null argument");

@@ -66,32 +66,50 @@ public abstract class Copy {
 				sourceFile.getAbsolutePath()))
 			throw new IllegalArgumentException("Cannot copy a file on itself");
 	
+		RandomAccessFile s=null,d=null;
 		FileChannel source = null;
 		FileChannel destination = null;
-		source = new RandomAccessFile(sourceFile, "r").getChannel();
-		destination = new RandomAccessFile(destinationFile, "rw").getChannel();
 		try {
+		        s= new RandomAccessFile(sourceFile, "r");
+	                source =s.getChannel();
+	                d=new RandomAccessFile(destinationFile, "rw");
+	                destination = d.getChannel();		    
 			IOUtils.copyFileChannel(size, source, destination);
 		} finally {
-			try {
-				if (source != null) {
-					try {
-						source.close();
-					} catch (Throwable t) {
-						if (LOGGER.isInfoEnabled())
-							LOGGER.info(t.getLocalizedMessage(), t);
-					}
-				}
-			} finally {
-				if (destination != null) {
-					try {
-						destination.close();
-					} catch (Throwable t) {
-						if (LOGGER.isInfoEnabled())
-							LOGGER.info(t.getLocalizedMessage(), t);
-					}
-				}
-			}
+                    if (source != null) {
+                        try {
+                            source.close();
+                        } catch (Throwable t) {
+                            if (LOGGER.isInfoEnabled())
+                                LOGGER.info(t.getLocalizedMessage(), t);
+                        }
+                    }
+                    if (s != null) {
+                        try {
+                            s.close();
+                        } catch (Throwable t) {
+                            if (LOGGER.isInfoEnabled())
+                                LOGGER.info(t.getLocalizedMessage(), t);
+                        }
+                    }                    
+
+                    if (destination != null) {
+                        try {
+                            destination.close();
+                        } catch (Throwable t) {
+                            if (LOGGER.isInfoEnabled())
+                                LOGGER.info(t.getLocalizedMessage(), t);
+                        }
+                    }
+                    
+                    if (d != null) {
+                        try {
+                            d.close();
+                        } catch (Throwable t) {
+                            if (LOGGER.isInfoEnabled())
+                                LOGGER.info(t.getLocalizedMessage(), t);
+                        }
+                    }                    
 		}
 	}
 
