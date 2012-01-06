@@ -113,6 +113,25 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>    
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
                 <configuration>
@@ -344,7 +363,74 @@
     </dependencies>
 
     <modules>
-	<module>src</module>
+	<module>commons</module>
     </modules>
+
+    <!-- =========================================================== -->
+    <!--     Modules for the build in approximate dependency order   -->
+    <!-- =========================================================== -->
+    <profiles>
+    
+	<profile>
+            <id>io</id>
+            <activation>
+                <property>
+                    <name>all</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>io</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>compress</id>
+            <activation>
+                <property>
+                    <name>all</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>compress</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>freemarker</id>
+            <activation>
+                <property>
+                    <name>all</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>freemarker</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>geotools</id>
+            <activation>
+                <property>
+                    <name>all</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>geotools</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>netcdf</id>
+            <activation>
+                <property>
+                    <name>all</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>netcdf</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
 
