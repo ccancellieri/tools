@@ -28,21 +28,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>it.geosolutions.tools</groupId>
     <artifactId>tools</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <packaging>pom</packaging>
-
     <name>tools</name>
-    
     <description>
         GeoSolution's set of tools
     </description>
-
-    <inceptionYear>2007</inceptionYear>
-
+    <inceptionYear>2011</inceptionYear>
     <organization>
         <name>GeoSolutions</name>
         <url>http://www.geo-solutions.it</url>
@@ -57,6 +51,14 @@
           <organizationUrl>http://www.geo-solutions.it</organizationUrl>
           <timezone>+1</timezone>
       </developer>
+      <developer>
+          <id>simboss</id>
+          <name>Simone Giannecchini</name>
+          <email>simone.giannecchini AT geosolutions.it</email>
+          <organization>GeoSolutions</organization>
+          <organizationUrl>http://www.geo-solutions.it</organizationUrl>
+          <timezone>+1</timezone>
+      </developer>      
     </developers>
     
     <licenses>
@@ -67,7 +69,6 @@
         </license>
     </licenses>
     
-    <url>http://www.geo-solutions.it</url>
     
     <issueManagement>
         <system>googlecode</system>
