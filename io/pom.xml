@@ -21,6 +21,7 @@
 	<!-- =========================================================== -->
 	<groupId>it.geosolutions.tools</groupId>
 	<artifactId>tools-io</artifactId>
+        <version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>GeoSolutions IO tools</name>

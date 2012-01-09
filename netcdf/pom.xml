@@ -28,8 +28,8 @@
 	<url>http://www.geo-solutions.it/maven_reports/tools/</url>
 
 	<description>
-    GeoSolutions netcdf tools.
-  </description>
+		GeoSolutions netcdf tools.
+	</description>
 
 	<licenses>
 		<license>

@@ -21,6 +21,7 @@
 	<!-- =========================================================== -->
 	<groupId>it.geosolutions.tools</groupId>
 	<artifactId>tools-commons</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>GeoSolutions commons tools</name>
