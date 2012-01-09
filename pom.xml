@@ -57,6 +57,7 @@
 	</mailingLists>
 
 	<scm>
+		<!--git@github.com:geosolutions-it/tools.git-->
 		<connection>scm:git:https://github.com/geosolutions-it/tools.git</connection>
 		<!--developerConnection>scm:git</developerConnection -->
 		<tag>master</tag>
@@ -117,6 +118,15 @@
 				<version>2.7</version>
 				<configuration>
 					<detectLinks />
+				</configuration>
+			</plugin>
+			<!-- versioning -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.2.2</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 			<!-- eclipse ide integration -->
