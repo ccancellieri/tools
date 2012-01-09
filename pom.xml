@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.geosolutions.tools</groupId>
 	<artifactId>tools</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>tools</name>
 	<description>
@@ -200,7 +199,8 @@
 	<properties>
 		<project.version>1.0-SNAPSHOT</project.version>
 		<test.maxHeapSize>512M</test.maxHeapSize>
-		<gt.version>8-SNAPSHOT</gt.version>
+		<!--gt.version>8-SNAPSHOT</gt.version-->
+		<gt.version>8.0-M4</gt.version>
 		<slf4j.version>1.5.11</slf4j.version>
 	</properties>
 
@@ -352,6 +352,11 @@
       <id>geosolutions</id>
       <name>GeoSolutions Repository</name>
       <url>http://maven.geo-solutions.it</url>
+    </repository>
+    <repository>
+      <id>osgeo</id>
+      <name>OsGEO Repository</name>
+      <url>http://download.osgeo.org/webdav/geotools/</url>
     </repository>
     <repository>
       <id>java.net</id>
