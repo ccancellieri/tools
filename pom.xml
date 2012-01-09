@@ -58,7 +58,8 @@
 
 	<scm>
 		<!--git@github.com:geosolutions-it/tools.git-->
-		<connection>scm:git:https://github.com/geosolutions-it/tools.git</connection>
+		<connection>scm:git:[fetch=]https://github.com/geosolutions-it/tools.git[push=]git@github.com:geosolutions-it/tools.git</connection>
+		<!--connection>scm:git:https://github.com/geosolutions-it/tools.git</connection-->
 		<!--developerConnection>scm:git</developerConnection -->
 		<tag>master</tag>
 		<url>https://github.com/geosolutions-it/tools</url>
@@ -198,7 +199,7 @@
 	</reporting>
 
 	<properties>
-		<project.version>1.0-SNAPSHOT</project.version>
+		<project.version>@{project.version}</project.version>
 		<test.maxHeapSize>512M</test.maxHeapSize>
 		<!--gt.version>8-SNAPSHOT</gt.version-->
 		<gt.version>8.0-M4</gt.version>
