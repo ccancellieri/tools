@@ -1,13 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.geosolutions.tools</groupId>
 	<artifactId>tools</artifactId>
-	<version>1.0.0</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>tools</name>
 	<description>
-        	GeoSolution's set of tools
-	</description>
+        GeoSolution's set of tools
+    </description>
 	<inceptionYear>2011</inceptionYear>
 	<organization>
 		<name>GeoSolutions</name>
@@ -57,10 +58,9 @@
 
 	<scm>
 		<!--git@github.com:geosolutions-it/tools.git-->
-		<!--connection>scm:git:[fetch=]https://github.com/geosolutions-it/tools.git[push=]git@github.com:geosolutions-it/tools.git</connection-->
-		<developerConnection>scm:git:[fetch=]https://github.com/geosolutions-it/tools.git[push=]git@github.com:geosolutions-it/tools.git</developerConnection>
+		<connection>scm:git:https://github.com/geosolutions-it/tools.git</connection>
 		<!--developerConnection>scm:git</developerConnection -->
-		<!--tag>master</tag-->
+		<tag>master</tag>
 		<url>https://github.com/geosolutions-it/tools</url>
 	</scm>
 
@@ -126,7 +126,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.2.2</version>
 				<configuration>
-					<tagNameFormat>v${project.version}</tagNameFormat>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 			<!-- eclipse ide integration -->
@@ -198,7 +198,7 @@
 	</reporting>
 
 	<properties>
-		<project.version>@{project.version}</project.version><!--1.0-SNAPSHOT-->
+		<project.version>1.0-SNAPSHOT</project.version>
 		<test.maxHeapSize>512M</test.maxHeapSize>
 		<!--gt.version>8-SNAPSHOT</gt.version-->
 		<gt.version>8.0-M4</gt.version>
@@ -310,11 +310,13 @@
 				<groupId>org.geotools</groupId>
 				<artifactId>gt-sample-data</artifactId>
 				<version>${gt.version}</version>
+			<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.8.2</version>
+			<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -353,11 +355,6 @@
       <id>geosolutions</id>
       <name>GeoSolutions Repository</name>
       <url>http://maven.geo-solutions.it</url>
-    </repository>
-    <repository>
-      <id>osgeo</id>
-      <name>OsGEO Repository</name>
-      <url>http://download.osgeo.org/webdav/geotools/</url>
     </repository>
     <repository>
       <id>java.net</id>
