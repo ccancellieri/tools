@@ -8,7 +8,7 @@
   <name>tools</name>
   <description>
         GeoSolution's set of tools
-    </description>
+  </description>
   <inceptionYear>2011</inceptionYear>
   <organization>
     <name>GeoSolutions</name>
@@ -181,7 +181,7 @@
     </plugins>
   </reporting>
   <properties>
-    <project.version>@{project.version}</project.version>
+    <tools.version>${project.version}</tools.version>
     <test.maxHeapSize>512M</test.maxHeapSize>
     <!--gt.version>8-SNAPSHOT</gt.version-->
     <gt.version>8.0-M4</gt.version>
@@ -221,7 +221,10 @@
         <version>${gt.version}</version>
       </dependency>
       <!-- netcdf-java -->
-      <dependency>
+            <!--=============================================================-->
+      <!-- NetCDF =====================================================-->
+      <!--=============================================================-->
+      <!--dependency>
         <groupId>essi-unidata</groupId>
         <artifactId>netcdf-java</artifactId>
         <version>4.0.49</version>
@@ -231,6 +234,24 @@
             <artifactId>slf4j-log4j12</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      -->
+      <!-- JAVA 1.6 -->
+      <dependency>
+	  <groupId>edu.ucar</groupId>
+	  <artifactId>unidataCommon</artifactId>
+	  <version>4.2.20</version>
+      </dependency>
+      <dependency>
+	  <groupId>edu.ucar</groupId>
+	  <artifactId>netcdf</artifactId>
+	  <version>4.2.20</version>
+	  <exclusions>
+	      <exclusion>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+	      </exclusion>
+	  </exclusions>
       </dependency>
       <!-- xml -->
       <dependency>

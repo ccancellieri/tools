@@ -43,8 +43,14 @@
     <!-- libraries -->
     <!-- tools.netcdf -->
     <dependency>
-      <groupId>essi-unidata</groupId>
-      <artifactId>netcdf-java</artifactId>
+	<groupId>edu.ucar</groupId>
+        <artifactId>unidataCommon</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>edu.ucar</groupId>
+        <artifactId>netcdf</artifactId>
+      <!--groupId>essi-unidata</groupId>
+      <artifactId>netcdf-java</artifactId-->
     </dependency>
   </dependencies>
 </project>
