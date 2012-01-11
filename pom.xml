@@ -184,7 +184,7 @@
     <tools.version>${project.version}</tools.version>
     <test.maxHeapSize>512M</test.maxHeapSize>
     <!--gt.version>8-SNAPSHOT</gt.version-->
-    <gt.version>8.0-M4</gt.version>
+    <gt.version>8-SNAPSHOT</gt.version>
     <slf4j.version>1.5.11</slf4j.version>
   </properties>
   <dependencyManagement>

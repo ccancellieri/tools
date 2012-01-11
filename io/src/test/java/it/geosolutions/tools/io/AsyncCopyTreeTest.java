@@ -1,10 +1,28 @@
+/*
+ * Copyright (C) 2011 - 2012  GeoSolutions S.A.S.
+ * http://www.geo-solutions.it
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package it.geosolutions.tools.io;
 
 import it.geosolutions.tools.commons.file.Path;
+import it.geosolutions.tools.commons.listener.DefaultProgress;
 import it.geosolutions.tools.io.file.CopyTree;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -71,8 +89,9 @@ public class AsyncCopyTreeTest {
         File srcMount = TestData.file(this, ".");
         CopyTree act = new CopyTree(FileFilterUtils.or(FileFilterUtils.directoryFileFilter(),
                 FileFilterUtils.fileFileFilter()), cs, srcMount, destMount);
-        Collection<Future<File>> list = act.copy();
-        int workSize = list.size();
+        act.addCollectingListener(new DefaultProgress("COLLECTING"));
+        act.addCopyListener(new DefaultProgress("COPY"));
+        int workSize = act.copy();
         try {
             while (workSize-- > 0) {
                 Future<File> future = cs.take();
@@ -91,42 +110,6 @@ public class AsyncCopyTreeTest {
     }
 
     @Test
-    public void asyncCopyTreeStopTest() throws Exception{
-        LOGGER.info("START: asyncCopyTreeStopTest");
-        File srcMount = TestData.file(this, ".");
-        CopyTree act = new CopyTree(
-                FileFilterUtils.or(FileFilterUtils.directoryFileFilter(),
-                FileFilterUtils.fileFileFilter()), 
-                cs, 
-                srcMount, 
-                destMount);
-        Collection<Future<File>> list = act.copy();
-        int workSize = list.size();
-        try {
-            while (workSize-- > 0) {
-                if (workSize == 2) {
-                    act.setCancelled(true);
-                }
-                Future<File> future = cs.take();
-                try {
-                    if (workSize <= 2)
-                        LOGGER.info("[STOPPED] copied file: " + future.get());
-                    else
-                        LOGGER.info("copied file: " + future.get());
-                } catch (ExecutionException e) {
-
-                    LOGGER.info(e.getLocalizedMessage(),e);
-                    Assert.fail();
-                }
-            }
-        } catch (InterruptedException e) {
-            LOGGER.info(e.getLocalizedMessage(),e);
-
-        }
-        LOGGER.info("STOP: asyncCopyTreeStopTest");
-    }
-
-    @Test
     public void asyncStopCopyTest() throws Exception{
         LOGGER.info("BEGIN: asyncStopCopyTest");
         File srcMount = TestData.file(this, ".");
@@ -135,8 +118,8 @@ public class AsyncCopyTreeTest {
 
         final Thread copier = new Thread(new Runnable() {
             public void run() {
-                act.setCancelled(true);
-                Assert.assertNull("Returned list should be null", act.copy());
+                act.setCancelled();
+                Assert.assertEquals("Returned list should be null",0, act.copy());
             }
         });
 

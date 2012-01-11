@@ -19,8 +19,6 @@
  */
 package it.geosolutions.tools.commons.string;
 
-import it.geosolutions.tools.commons.string.Regex;
-
 import java.util.HashMap;
 import java.util.Map;
 

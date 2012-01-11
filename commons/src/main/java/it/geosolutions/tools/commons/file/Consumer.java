@@ -18,7 +18,6 @@
  */
 package it.geosolutions.tools.commons.file;
 
-import it.geosolutions.tools.commons.file.Producer;
 
 
 /**
