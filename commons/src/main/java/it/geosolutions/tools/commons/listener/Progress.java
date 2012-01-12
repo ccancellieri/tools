@@ -27,24 +27,6 @@ import java.io.Serializable;
  * <p>
  * All implementations should be multi-thread safe, even the ones that provide
  * feedback to a user interface thread.
- * <p>
- * Usage example:
- * <blockquote><pre>
- * float scale = 100f / maximumCount;
- * listener.started();
- * for (int counter=0; counter&lt;maximumCount; counter++) {
- *     if (listener.isCanceled()) {
- *         break;
- *     }
- *     listener.progress(scale * counter);
- *     try {
- *         // Do some work...
- *     } catch (NonFatalException e) {
- *         listener.exceptionOccurred(e);
- *     }
- * }
- * listener.complete();
- * </pre></blockquote>
  *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  * 
@@ -52,15 +34,7 @@ import java.io.Serializable;
  *
  * 
  */
-public interface Progress<T extends Serializable, W > {
-    /**
-     * Returns the description of the current task being performed, or {@code null} if none.
-     * It is assumed that if the task is {@code null} applications may simply report that the
-     * process is "in progress" or "working" as represented in the current locale.
-     *
-     * @return The task being performed, or {@code null} if none.
-     */
-    //T getTask();
+public interface Progress<T extends Serializable > {
 
     /**
      * Sets the description of the current task being performed. This method is usually invoked
@@ -70,12 +44,12 @@ public interface Progress<T extends Serializable, W > {
      *
      * @param task Description of the task being performed, or {@code null} if none.
      */
-    void setTask(T task);
+    void onNewTask(T task);
 
     /**
      * Notifies this listener that the operation begins.
      */
-    void setStarted();
+    void onStart();
 
     /**
      * Notifies this listener of progress in the lengthly operation. Progress are reported
@@ -84,40 +58,26 @@ public interface Progress<T extends Serializable, W > {
      * @param percent The progress as a value between 0 and 100 inclusive.
      * 
      */
-    void setProgress(float percent);
+    void onUpdateProgress(float percent);
 
-    /**
-     * Returns the current progress as a percent completed.
-     *
-     * @return Percent completed between 0 and 100 inclusive.
-     *
-     */
-    //float getProgress();
 
     /**
      * Notifies this listener that the operation has finished. The progress indicator will
      * shows 100% or disappears, at implementor choice. If warning messages were pending,
      * they will be displayed now.
      */
-    void setCompleted();
+    void onCompleted();
 
     /**
      * Releases any resources used by this listener. If the progress were reported in a window,
      * this window may be disposed.
      */
-    void dispose();
-
-    /**
-     * Returns {@code true} if this job is cancelled.
-     *
-     * @return {@code true} if this job is cancelled.
-     */
-//    boolean isCanceled();
+    void onDispose();
 
     /**
      * Indicates that task should be cancelled.
      */
-    void cancel();
+    void onCancel();
 
     /**
      * Reports a warning. This warning may be {@linkplain java.util.logger.Logger logged}, printed
@@ -134,13 +94,7 @@ public interface Progress<T extends Serializable, W > {
      * @param warning
      *          The warning message.
      */
-    void warningOccurred(String source, String location, String warning);
-    
-    /**
-     * @return unmodifiable list of warnings occurred during last task
-     * @param W an object representing a warning
-     */
-//    List<W> getWarnings();
+    void onWarningOccurred(String source, String location, String warning);
 
     /**
      * Reports an exception. This method may prints the stack trace to the {@linkplain System#err
@@ -148,11 +102,6 @@ public interface Progress<T extends Serializable, W > {
      *
      * @param exception The exception to report.
      */
-    void exceptionOccurred(Throwable exception);
+    void onExceptionOccurred(Throwable exception);
     
-    
-    /**
-     * @return unmodifiable list of Throwable occurred during last task
-     */
-//    List<Throwable> getExceptions();
 }

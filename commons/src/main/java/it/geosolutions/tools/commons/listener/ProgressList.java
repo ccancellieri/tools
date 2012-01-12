@@ -21,7 +21,6 @@ package it.geosolutions.tools.commons.listener;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,74 +33,74 @@ import java.util.List;
  * 
  * @see DefaultProgress
  */
-public final class ProgressList<T extends Serializable,W> implements Progress<T, W>{
+public final class ProgressList<T extends Serializable> implements Progress<T>{
 	
-	private final List<Progress<T,W>> listeners=Collections.synchronizedList(new LinkedList<Progress<T,W>>());
+	private final List<Progress<T>> listeners=new LinkedList<Progress<T>>();
 
     /**
      * 
      * @param listener the listener to add
      * @return as specified {@link Collection#add(Object)}
      */
-    public boolean addListener(Progress<T, W> listener){
+    public synchronized boolean addListener(Progress<T> listener){
     	return listeners.add(listener);
     }
 
-	public void setTask(T task) {
-		for (Progress<T, W> p: listeners){
-			p.setTask(task);
+	public synchronized void onNewTask(T task) {
+		for (Progress<T> p: listeners){
+			p.onNewTask(task);
 		}
 	}
 
-	public void setStarted() {
-		for (Progress<T, W> p: listeners){
-			p.setStarted();
+	public synchronized void onStart() {
+		for (Progress<T> p: listeners){
+			p.onStart();
 		}
 	}
 
-	public void setProgress(float percent) {
-		for (Progress<T, W> p: listeners){
-			p.setProgress(percent);
+	public synchronized void onUpdateProgress(float percent) {
+		for (Progress<T> p: listeners){
+			p.onUpdateProgress(percent);
 		}
 	}
 
-	public void setCompleted() {
-		for (Progress<T, W> p: listeners){
-			p.setCompleted();
+	public synchronized void onCompleted() {
+		for (Progress<T> p: listeners){
+			p.onCompleted();
 		}
 	}
 
-	public void dispose() {
-		for (Progress<T, W> p: listeners){
-			p.dispose();
+	public synchronized void onDispose() {
+		for (Progress<T> p: listeners){
+			p.onDispose();
 		}
 	}
 
 //	public boolean isCanceled() {
 //		boolean res=false;
-//		for (Progress<T, W> p: listeners){
+//		for (Progress<T> p: listeners){
 //			res=res||p.isCanceled();
 //		}
 //		return res;
 //	}
 
-	public void cancel() {
-		for (Progress<T, W> p: listeners){
-			p.cancel();
+	public synchronized void onCancel() {
+		for (Progress<T> p: listeners){
+			p.onCancel();
 		}
 	}
 
-	public void warningOccurred(String source, String location,
+	public synchronized void onWarningOccurred(String source, String location,
 			String warning) {
-		for (Progress<T, W> p: listeners){
-			p.warningOccurred(source, location, warning);
+		for (Progress<T> p: listeners){
+			p.onWarningOccurred(source, location, warning);
 		}
 		
 	}
 
-	public void exceptionOccurred(Throwable exception) {
-		for (Progress<T, W> p: listeners){
-			p.exceptionOccurred(exception);
+	public synchronized void onExceptionOccurred(Throwable exception) {
+		for (Progress<T> p: listeners){
+			p.onExceptionOccurred(exception);
 		}
 	}
 	

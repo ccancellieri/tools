@@ -33,7 +33,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
@@ -45,8 +44,6 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  * 
- * @param P
- *            default Progress<String,DefaultProgress.Warning>>
  */
 public class CopyTree extends DirectoryWalker<Future<File>> {
 
@@ -64,7 +61,7 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 */
 	private final Collection<Future<File>> works = new ArrayList<Future<File>>();
 
-	private final ProgressList<String, DefaultProgress.Warning> collectingProgressList = new ProgressList<String, DefaultProgress.Warning>();
+	private final ProgressList<String> collectingProgressList = new ProgressList<String>();
 	/**
 	 * used to track cancel collecting op.
 	 */
@@ -74,18 +71,18 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 */
 	private boolean collectingCompleted = false;
 
-	private final ProgressList<String, DefaultProgress.Warning> copyProgressList = new ProgressList<String, DefaultProgress.Warning>();
+	private final ProgressList<String> copyProgressList = new ProgressList<String>();
 	
 	/**
 	 * represents the sum of all the collected file size<br>
 	 * It is used to calculate copyProgressList
 	 */
-	private volatile AtomicLong copyTotalSize=new AtomicLong(0L);
+	private volatile long copyTotalSize=0L;
 	/**
 	 * represents the current copyProgress status in byte
 	 * @see {@link CopyTree#updateProgress(long)}
 	 */
-	private volatile AtomicLong copyProgress=new AtomicLong(0L);
+	private volatile long copyProgress=0L;
 	/**
 	 * used to track cancel file copy op.
 	 */
@@ -137,12 +134,12 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 */
 	public final void setCancelled() {
 		// send cancel event
-		collectingProgressList.cancel();
-		collectingProgressList.warningOccurred("manually canceled", Thread
+		collectingProgressList.onCancel();
+		collectingProgressList.onWarningOccurred("manually canceled", Thread
 				.currentThread().getName(), "Operation is canceled");
 		// send cancel event
-		copyProgressList.cancel();
-		copyProgressList.warningOccurred("manually canceled", Thread
+		copyProgressList.onCancel();
+		copyProgressList.onWarningOccurred("manually canceled", Thread
 				.currentThread().getName(), "Operation is canceled");
 
 		this.collectingCanceled = true;
@@ -173,10 +170,10 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	@Override
 	protected void handleStart(File startDirectory,
 			Collection<Future<File>> results) throws IOException {
-		collectingProgressList.setStarted();
-		collectingProgressList.setTask("Starting collecting files to copy from: "
+		collectingProgressList.onStart();
+		collectingProgressList.onNewTask("Starting collecting files to copy from: "
 				+ startDirectory.getAbsolutePath());
-		collectingProgressList.setProgress(0);
+		collectingProgressList.onUpdateProgress(0);
 	}
 
 	/**
@@ -186,8 +183,8 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	@Override
 	protected void handleEnd(Collection<Future<File>> results)
 			throws IOException {
-		collectingProgressList.setCompleted();
-		collectingProgressList.setProgress(100);
+		collectingProgressList.onCompleted();
+		collectingProgressList.onUpdateProgress(100);
 		collectingCompleted = true;
 	}
 
@@ -198,7 +195,7 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 * @return as specified {@link Collection#add(Object)}
 	 */
 	public boolean addCollectingListener(
-			Progress<String, DefaultProgress.Warning> listener) {
+			Progress<String> listener) {
 		return collectingProgressList.addListener(listener);
 	}
 
@@ -209,7 +206,7 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 * @return as specified {@link Collection#add(Object)}
 	 */
 	public boolean addCopyListener(
-			Progress<String, DefaultProgress.Warning> listener) {
+			Progress<String> listener) {
 		return copyProgressList.addListener(listener);
 	}
 
@@ -237,8 +234,8 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 			 */
 
 			// store exception
-			collectingProgressList.exceptionOccurred(ioe);
-			copyProgressList.exceptionOccurred(ioe);
+			collectingProgressList.onExceptionOccurred(ioe);
+			copyProgressList.onExceptionOccurred(ioe);
 
 			// send cancel event
 			// done in setCancel() -> collectingProgressList.cancel();
@@ -249,8 +246,8 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 
 		} catch (IOException ioe) {
 			// store exception
-			collectingProgressList.exceptionOccurred(ioe);
-			copyProgressList.exceptionOccurred(ioe);
+			collectingProgressList.onExceptionOccurred(ioe);
+			copyProgressList.onExceptionOccurred(ioe);
 
 			// send cancel event
 			setCancelled();
@@ -322,25 +319,25 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 			SecurityException {
 		if (!collectingCanceled) {
 			if (!copyStarted) {
-				copyProgressList.setStarted();
-				copyProgressList.setTask("starting copy tree");
-				copyProgressList.setProgress(0);
+				copyProgressList.onStart();
+				copyProgressList.onNewTask("starting copy tree");
+				copyProgressList.onUpdateProgress(0);
 			}
 			// calculate file size
 			final long fileSize = file.length();
 
 			// update total file size to copy
-			this.copyTotalSize.addAndGet(fileSize);
+			this.copyTotalSize+=fileSize;
 
 			//
-			Progress<String, DefaultProgress.Warning> listener = new DefaultProgress("COPY["+file.getName()+"]") {
+			Progress<String> listener = new DefaultProgress("COPY["+file.getName()+"]") {
 				/**
 				 * override default setCompleted call to update progress on file
 				 * copy completion
 				 */
 				@Override
-				public void setCompleted() {
-					super.setCompleted();
+				public void onCompleted() {
+					super.onCompleted();
 					updateProgress(fileSize);
 				}
 			};
@@ -351,22 +348,26 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	}
 
 	/**
-	 * when collecting operation is complete [copyTotalSize == 100 %]
+	 * Synchronized: This is called by all the copy threads modifying members
+	 * 
 	 * @see {@link #copyTotalSize}
 	 * @see {@link #copyProgress}
 	 */
-	private void updateProgress(long fileSize) {
-		long localCopyProgress=copyProgress.addAndGet(fileSize);
+	private synchronized void updateProgress(long fileSize) {
+		this.copyProgress+=fileSize;
+		/**
+		 * when collecting operation is complete [copyTotalSize means 100%]
+		 */
 		if (collectingCompleted){
 			// x : 100 = (fileSize+copyProgress) : copyTotalSize
-			copyProgressList.setProgress(localCopyProgress*100/copyTotalSize.get());
+			copyProgressList.onUpdateProgress(copyProgress*100/copyTotalSize);
 		} else {
 			/*
 			 * fake percent progress still calculating total file size
 			 */
-			copyProgressList.warningOccurred("updating process",
+			copyProgressList.onWarningOccurred("updating process",
 					Thread.currentThread().getName(), "fake % progress still calculating total file size");
-//			copyProgressList.setProgress(copyProgress*100/copyTotalSize);
+			copyProgressList.onUpdateProgress(copyProgress*100/copyTotalSize);
 		}
 	}
 
@@ -388,44 +389,43 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 	 */
 	public static Future<File> asyncCopyTree(final CompletionService<File> cs,
 			final File source, final File sourceDir, final File destinationDir,
-			final Progress<String, DefaultProgress.Warning> listener)
+			final Progress<String> listener)
 			throws RejectedExecutionException, IllegalArgumentException {
 
 		final Callable<File> call = new Callable<File>() {
 			public File call() throws Exception {
 				try {
 					// build the new path
-					listener.setTask("rebase file path");
-					listener.setStarted();
+					listener.onNewTask("rebase file path");
+					listener.onStart();
 					File destFile = Path.rebaseFile(sourceDir, destinationDir,
 							source);
-					listener.setCompleted();
-					listener.setProgress(10);
+					listener.onUpdateProgress(10);
 
 					// try to build the directory tree
-					listener.setTask("building directory structure");
-					listener.setStarted();
+					listener.onNewTask("building directory structure");
+					listener.onStart();
 					if (!destFile.getParentFile().mkdirs()) {
-						listener.warningOccurred(
+						listener.onWarningOccurred(
 								this.getClass().getSimpleName(),
 								Thread.currentThread().getName(),
 								"Unable to create the destination directory structure: probably it already exists");
 					}
-					listener.setCompleted();
-					listener.setProgress(30);
+					listener.onUpdateProgress(30);
 
 					// start copy
-					listener.setTask("copying " + source + " to " + destFile);
-					listener.setStarted();
+					listener.onNewTask("copying " + source + " to " + destFile);
+					listener.onStart();
 					FileUtils.copyFile(source, destFile);
-					listener.setCompleted();
+					
 
-					listener.setProgress(100);
+					listener.onUpdateProgress(100);
+					listener.onCompleted();
 					// return the rebased and copied file
 					return destFile;
 				} catch (Exception e) {
-					listener.exceptionOccurred(e);
-					listener.cancel();
+					listener.onExceptionOccurred(e);
+					listener.onCancel();
 					throw e;
 				}
 			}
@@ -433,12 +433,12 @@ public class CopyTree extends DirectoryWalker<Future<File>> {
 		try {
 			return cs.submit(call);
 		} catch (NullPointerException e) {
-			listener.exceptionOccurred(e);
-			listener.cancel();
+			listener.onExceptionOccurred(e);
+			listener.onCancel();
 			throw e;
 		} catch (RejectedExecutionException e) {
-			listener.exceptionOccurred(e);
-			listener.cancel();
+			listener.onExceptionOccurred(e);
+			listener.onCancel();
 			throw e;
 		}
 	}
