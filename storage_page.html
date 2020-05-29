@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List google cloud bucket by ccancellieri</title>
+	
+	<script>
+    
+		function loadBucket(bucketName){
+			var ajaxRequest = new XMLHttpRequest();
+			ajaxRequest.onreadystatechange = function(){
+			
+				if(ajaxRequest.readyState == 4){
+					//the request is completed, now check its status
+					if(ajaxRequest.status == 200){
+                    generate_table(JSON.parse(ajaxRequest.responseText).items);
+                    
+                    //var table = ajaxRequest.response.items
+						//document.getElementById("welcome").innerHTML = table;
+					}
+					else{
+						console.log("Status error: " + ajaxRequest.status);
+					}
+				}
+				else{
+					console.log("Ignored readyState: " + ajaxRequest.readyState);
+				}
+			
+			
+			}
+			ajaxRequest.open('GET', 'https://storage.googleapis.com/storage/v1/b/'+bucketName+'/o');
+			ajaxRequest.send();
+		}
+	
+function generate_table(items) {
+  // get the reference for the body
+  var body = document.getElementsByTagName("body")[0];
+
+  // creates a <table> element and a <tbody> element
+  var tbl = document.createElement("table");
+  var tblBody = document.createElement("tbody");
+
+  // creating all cells
+  for (let i in items) {
+    let item = items[i];
+    // creates a table row
+    var row = document.createElement("tr");
+
+    var cell1 = document.createElement("td");
+    cell1.appendChild(document.createTextNode(i));
+    row.appendChild(cell1);
+
+    var cell2 = document.createElement("td");
+     
+    let itemNode = document.createElement("a");
+    itemNode.append(document.createTextNode(item.name));
+    itemNode.setAttribute('title', item.name);
+    itemNode.setAttribute('href', item.mediaLink);
+    cell2.appendChild(itemNode);
+    row.appendChild(cell2);
+
+    var cell3 = document.createElement("td");
+    let size = item.size/1024/1024
+    cell3.appendChild(document.createTextNode(size+" Mb"));
+    row.appendChild(cell3);
+
+    // add the row to the end of the table body
+    tblBody.appendChild(row);
+  }
+
+  // put the <tbody> in the <table>
+  tbl.appendChild(tblBody);
+  // appends <table> into <body>
+  body.appendChild(tbl);
+  // sets the border attribute of tbl to 2;
+  tbl.setAttribute("border", "2");
+}
+	</script>
+    
+</head>
+<body onload="loadBucket('fao-maps-catalog-data')">
+	<p id="table"></p>
+	<p>This is the list of files in the bucket</p>
+</body>
+</html>
