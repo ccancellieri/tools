@@ -1,0 +1,60 @@
+<!DOCTYPE html -->
+<html>
+<head>
+  <title>Vector tiles</title>
+  
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css">
+  
+  <style>
+    html, body {
+      font-family: sans-serif;
+      width: 100%;
+    }
+    .map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h3>Mapbox Protobuf - vector tiles</h3>
+  <div id="map" class="map"></div>
+  <script>
+
+  var style_simple = new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: '#ADD8E6'
+    }),
+    stroke: new ol.style.Stroke({
+      color: '#880000',
+      width: 1
+    })
+  });
+
+  function simpleStyle(feature) {
+    return style_simple;
+  }
+
+  var layer = 'gadm:level0';
+  var projection_epsg_no = '3857';
+  var map = new ol.Map({
+    target: 'map',
+    view: new ol.View({
+      center: [0, 0],
+      zoom: 2
+    }),
+    layers: [new ol.layer.VectorTile({
+      style:simpleStyle,
+      source: new ol.source.VectorTile({
+        tilePixelRatio: 1, // oversampling when > 1
+        tileGrid: ol.tilegrid.createXYZ({maxZoom: 19}),
+        format: new ol.format.MVT(),
+        url: '/geoserver/gwc/service/tms/1.0.0/' + layer +
+            '@EPSG%3A'+projection_epsg_no+'@pbf/{z}/{x}/{-y}.pbf'
+      })
+    })]
+  });
+  </script>
+</body>
+</html>
